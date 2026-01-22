@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +15,7 @@ import com.example.myownlauncher.data.AppInfo
 
 class AppListAdapter(
     private val showIcons: Boolean = false,
+    private val textSize: Float = 16f,
     private val onAppClick: (AppInfo) -> Unit,
     private val onAppLongClick: (AppInfo) -> Unit
 ) : ListAdapter<AppInfo, AppListAdapter.AppViewHolder>(AppDiffCallback()) {
@@ -30,13 +31,14 @@ class AppListAdapter(
     }
 
     inner class AppViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val cardView: CardView = itemView.findViewById(R.id.cardView)
+        private val container: LinearLayout = itemView.findViewById(R.id.appItemLayout)
         private val appIcon: ImageView = itemView.findViewById(R.id.appIcon)
         private val appName: TextView = itemView.findViewById(R.id.appName)
 
         fun bind(app: AppInfo) {
             // Set app name
             appName.text = app.getDisplayName()
+            appName.textSize = textSize
 
             // Show/hide icon
             appIcon.visibility = if (showIcons) View.VISIBLE else View.GONE
@@ -44,21 +46,19 @@ class AppListAdapter(
                 appIcon.setImageDrawable(app.icon)
             }
 
-            // Apply custom background color
+            // Apply custom background color to the entire row
             if (app.backgroundColor != null) {
-                cardView.setCardBackgroundColor(app.backgroundColor!!)
+                container.setBackgroundColor(app.backgroundColor!!)
             } else {
-                cardView.setCardBackgroundColor(Color.TRANSPARENT)
+                container.setBackgroundColor(Color.TRANSPARENT)
             }
 
             // Apply custom text color
             if (app.textColor != null) {
                 appName.setTextColor(app.textColor!!)
             } else {
-                // Default text color (from theme)
-                appName.setTextColor(
-                    itemView.context.getColor(android.R.color.primary_text_dark)
-                )
+                // Default white text
+                appName.setTextColor(Color.WHITE)
             }
 
             // Click listeners

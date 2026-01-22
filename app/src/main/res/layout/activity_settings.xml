@@ -3,150 +3,231 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:background="#000000"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
-        <!-- Display Settings -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Display"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <CheckBox
-            android:id="@+id/checkboxShowIcons"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Show App Icons"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:id="@+id/textSizeLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Text Size: 16sp"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="8dp" />
-
-        <SeekBar
-            android:id="@+id/seekBarTextSize"
+        <!-- Header -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:max="20"
-            android:progress="4"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
-        <!-- Sort Order -->
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@android:drawable/ic_menu_revert"
+                android:tint="#FFFFFF"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Settings"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:gravity="center" />
+
+            <View
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#333333" />
+
+        <!-- Home screen section -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sort Apps By"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnSortAlpha"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Alphabetical"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="48dp"
+            android:text="Home screen"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
-        <Button
-            android:id="@+id/btnSortMostUsed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Most Used"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/btnSortRecent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Recently Used"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@android:color/darker_gray"
-            android:layout_marginBottom="24dp" />
-
-        <!-- App Management -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="App Management"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:id="@+id/btnPhoneShortcut"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Phone dialer shortcut"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
-        <Button
+        <TextView
+            android:id="@+id/btnCameraShortcut"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Camera shortcut"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
             android:id="@+id/btnHiddenApps"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Hidden Apps"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#2196F3"
-            android:layout_marginBottom="24dp" />
+            android:layout_height="48dp"
+            android:text="Hidden apps"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
-        <!-- Permissions -->
+        <!-- Display section -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Permissions"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Display"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
-        <Button
+        <TextView
+            android:id="@+id/btnColorTheme"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Color theme"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btnFontSize"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Font size"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btnFont"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Font"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <!-- Gestures section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Gestures"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btnSwipeUp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Swipe up to open search"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btnSwipeDown"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Swipe down to see notifications"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/btnDoubleTap"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Double-tap to lock"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <!-- More section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="More"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
             android:id="@+id/btnUsageStats"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Grant Usage Access"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#FF9800"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="48dp"
+            android:text="Grant usage access"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Required for app usage tracking and sorting by most used"
-            android:textColor="@android:color/darker_gray"
-            android:textSize="12sp"
-            android:layout_marginBottom="24dp" />
-
-        <!-- System Settings -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="System"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp" />
-
-        <Button
             android:id="@+id/btnSetDefault"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Set as Default Launcher"
-            android:textColor="@android:color/white"
-            android:backgroundTint="#4CAF50"
-            android:layout_marginBottom="8dp" />
+            android:layout_height="48dp"
+            android:text="Set as default launcher"
+            android:textColor="#CCCCCC"
+            android:textSize="14sp"
+            android:gravity="center_vertical"
+            android:paddingStart="40dp"
+            android:paddingEnd="24dp"
+            android:background="?attr/selectableItemBackground" />
 
     </LinearLayout>
 

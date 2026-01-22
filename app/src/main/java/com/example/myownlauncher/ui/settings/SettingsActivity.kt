@@ -3,15 +3,11 @@ package com.example.myownlauncher.ui.settings
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.SeekBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myownlauncher.R
 import com.example.myownlauncher.data.PreferencesManager
-import com.example.myownlauncher.data.SortMode
 import com.example.myownlauncher.ui.hiddenapps.HiddenAppsActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -27,76 +23,28 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        title = "Settings"
-
-        // Show App Icons Toggle
-        val showIconsCheckbox = findViewById<CheckBox>(R.id.checkboxShowIcons)
-        showIconsCheckbox.isChecked = prefsManager.shouldShowAppIcons()
-        showIconsCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            prefsManager.setShowAppIcons(isChecked)
-            Toast.makeText(this, "Restart launcher to see changes", Toast.LENGTH_SHORT).show()
-        }
-
-        // Text Size Slider
-        val textSizeSeekBar = findViewById<SeekBar>(R.id.seekBarTextSize)
-        val textSizeLabel = findViewById<TextView>(R.id.textSizeLabel)
-        val currentSize = prefsManager.getTextSize()
-        textSizeSeekBar.progress = (currentSize - 12).toInt()
-        textSizeLabel.text = "Text Size: ${currentSize.toInt()}sp"
-
-        textSizeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                val size = progress + 12f
-                textSizeLabel.text = "Text Size: ${size.toInt()}sp"
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                val size = (seekBar?.progress ?: 0) + 12f
-                prefsManager.setTextSize(size)
-                Toast.makeText(this@SettingsActivity, "Restart launcher to see changes", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        // Sort Mode Buttons
-        val btnSortAlpha = findViewById<Button>(R.id.btnSortAlpha)
-        val btnSortMostUsed = findViewById<Button>(R.id.btnSortMostUsed)
-        val btnSortRecent = findViewById<Button>(R.id.btnSortRecent)
-
-        // Highlight current sort mode
-        when (prefsManager.getSortMode()) {
-            SortMode.ALPHABETICAL -> btnSortAlpha.setBackgroundColor(getColor(R.color.selected))
-            SortMode.MOST_USED -> btnSortMostUsed.setBackgroundColor(getColor(R.color.selected))
-            SortMode.RECENTLY_USED -> btnSortRecent.setBackgroundColor(getColor(R.color.selected))
-            else -> {}
-        }
-
-        btnSortAlpha.setOnClickListener {
-            prefsManager.setSortMode(SortMode.ALPHABETICAL)
-            Toast.makeText(this, "Sort: Alphabetical", Toast.LENGTH_SHORT).show()
+        // Back button
+        findViewById<android.widget.ImageView>(R.id.backButton)?.setOnClickListener {
             finish()
         }
 
-        btnSortMostUsed.setOnClickListener {
-            prefsManager.setSortMode(SortMode.MOST_USED)
-            Toast.makeText(this, "Sort: Most Used", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-        btnSortRecent.setOnClickListener {
-            prefsManager.setSortMode(SortMode.RECENTLY_USED)
-            Toast.makeText(this, "Sort: Recently Used", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-
-        // Hidden Apps Button
-        findViewById<Button>(R.id.btnHiddenApps).setOnClickListener {
+        // Hidden Apps
+        findViewById<TextView>(R.id.btnHiddenApps).setOnClickListener {
             startActivity(Intent(this, HiddenAppsActivity::class.java))
         }
 
+        // Font Size
+        findViewById<TextView>(R.id.btnFontSize).setOnClickListener {
+            showFontSizeDialog()
+        }
+
+        // Color Theme
+        findViewById<TextView>(R.id.btnColorTheme).setOnClickListener {
+            Toast.makeText(this, "Theme selection coming soon", Toast.LENGTH_SHORT).show()
+        }
+
         // Usage Stats Permission
-        findViewById<Button>(R.id.btnUsageStats).setOnClickListener {
+        findViewById<TextView>(R.id.btnUsageStats).setOnClickListener {
             try {
                 startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
             } catch (e: Exception) {
@@ -105,9 +53,51 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         // Set as Default Launcher
-        findViewById<Button>(R.id.btnSetDefault).setOnClickListener {
+        findViewById<TextView>(R.id.btnSetDefault).setOnClickListener {
             val intent = Intent(Settings.ACTION_HOME_SETTINGS)
             startActivity(intent)
         }
+
+        // Gestures (just show toasts for now)
+        findViewById<TextView>(R.id.btnSwipeUp).setOnClickListener {
+            Toast.makeText(this, "Swipe up gesture configured", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<TextView>(R.id.btnSwipeDown).setOnClickListener {
+            Toast.makeText(this, "Swipe down gesture configured", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<TextView>(R.id.btnDoubleTap).setOnClickListener {
+            Toast.makeText(this, "Double-tap gesture configured", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun showFontSizeDialog() {
+        val sizes = arrayOf("Small (14sp)", "Medium (16sp)", "Large (18sp)", "Extra Large (20sp)")
+        val currentSize = prefsManager.getTextSize().toInt()
+        val selectedIndex = when (currentSize) {
+            14 -> 0
+            16 -> 1
+            18 -> 2
+            20 -> 3
+            else -> 1
+        }
+
+        android.app.AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
+            .setTitle("Font Size")
+            .setSingleChoiceItems(sizes, selectedIndex) { dialog, which ->
+                val newSize = when (which) {
+                    0 -> 14f
+                    1 -> 16f
+                    2 -> 18f
+                    3 -> 20f
+                    else -> 16f
+                }
+                prefsManager.setTextSize(newSize)
+                Toast.makeText(this, "Font size updated", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }

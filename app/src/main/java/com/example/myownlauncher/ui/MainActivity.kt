@@ -5,34 +5,35 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.GestureDetector
-import android.view.MotionEvent
 import android.view.View
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myownlauncher.R
-import com.example.myownlauncher.data.AppInfo
-import com.example.myownlauncher.data.AppManager
-import com.example.myownlauncher.data.PreferencesManager
-import com.example.myownlauncher.data.GestureAction
+import com.example.myownlauncher.data.*
 import com.example.myownlauncher.ui.adapters.AppListAdapter
 import com.example.myownlauncher.ui.customize.AppCustomizeActivity
 import com.example.myownlauncher.ui.settings.SettingsActivity
 import kotlinx.coroutines.launch
-import kotlin.math.abs
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchEditText: EditText
+    private lateinit var clockText: TextView
+    private lateinit var dateText: TextView
+    private lateinit var dayProgressBar: TextView
+    private lateinit var yearProgressBar: TextView
+    private lateinit var fastScrollView: View
     private lateinit var appManager: AppManager
     private lateinit var prefsManager: PreferencesManager
     private lateinit var adapter: AppListAdapter
-    private lateinit var gestureDetector: GestureDetector
 
     private var allApps = listOf<AppInfo>()
     private var filteredApps = listOf<AppInfo>()
@@ -45,17 +46,23 @@ class MainActivity : AppCompatActivity() {
         prefsManager = PreferencesManager(this)
 
         setupViews()
-        setupGestureDetector()
         loadApps()
+        startClock()
     }
 
     private fun setupViews() {
         recyclerView = findViewById(R.id.recyclerView)
         searchEditText = findViewById(R.id.searchEditText)
+        clockText = findViewById(R.id.clockText)
+        dateText = findViewById(R.id.dateText)
+        dayProgressBar = findViewById(R.id.dayProgressBar)
+        yearProgressBar = findViewById(R.id.yearProgressBar)
+        fastScrollView = findViewById(R.id.fastScrollView)
 
         // Setup RecyclerView
         adapter = AppListAdapter(
             showIcons = prefsManager.shouldShowAppIcons(),
+            textSize = prefsManager.getTextSize(),
             onAppClick = { app -> launchApp(app) },
             onAppLongClick = { app -> showAppOptionsDialog(app) }
         )
@@ -68,66 +75,70 @@ class MainActivity : AppCompatActivity() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 filterApps(s.toString())
+                // Show/hide clock based on search
+                val clockContainer = findViewById<View>(R.id.clockContainer)
+                clockContainer.visibility = if (s.isNullOrEmpty()) View.VISIBLE else View.GONE
             }
             override fun afterTextChanged(s: Editable?) {}
         })
 
-        // Settings button (optional - can be gesture-based too)
-        findViewById<View>(R.id.settingsButton)?.setOnClickListener {
+        // Settings icon
+        findViewById<View>(R.id.settingsIcon)?.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
+
+        // Update progress bars
+        updateProgressBars()
     }
 
-    private fun setupGestureDetector() {
-        gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            private val SWIPE_THRESHOLD = 100
-            private val SWIPE_VELOCITY_THRESHOLD = 100
-
-            override fun onFling(
-                e1: MotionEvent?,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                if (e1 == null) return false
-
-                val diffY = e2.y - e1.y
-                val diffX = e2.x - e1.x
-
-                if (abs(diffX) > abs(diffY)) {
-                    // Horizontal swipe
-                    if (abs(diffX) > SWIPE_THRESHOLD && abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffX > 0) {
-                            onSwipeRight()
-                        } else {
-                            onSwipeLeft()
-                        }
-                        return true
-                    }
-                } else {
-                    // Vertical swipe
-                    if (abs(diffY) > SWIPE_THRESHOLD && abs(velocityY) > SWIPE_VELOCITY_THRESHOLD) {
-                        if (diffY > 0) {
-                            onSwipeDown()
-                        } else {
-                            onSwipeUp()
-                        }
-                        return true
-                    }
-                }
-                return false
+    private fun startClock() {
+        val handler = android.os.Handler(mainLooper)
+        val updateClock = object : Runnable {
+            override fun run() {
+                updateClock()
+                handler.postDelayed(this, 1000) // Update every second
             }
-
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                onDoubleTapGesture()
-                return true
-            }
-        })
-
-        // Apply gesture detector to the main layout
-        findViewById<View>(R.id.mainLayout).setOnTouchListener { _, event ->
-            gestureDetector.onTouchEvent(event)
         }
+        handler.post(updateClock)
+    }
+
+    private fun updateClock() {
+        val calendar = Calendar.getInstance()
+        
+        // Time format (24h)
+        val timeFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+        clockText.text = timeFormat.format(calendar.time)
+        
+        // Date format
+        val dateFormat = SimpleDateFormat("EEEE, MMMM dd", Locale.getDefault())
+        dateText.text = dateFormat.format(calendar.time)
+    }
+
+    private fun updateProgressBars() {
+        val calendar = Calendar.getInstance()
+        
+        // Day progress (0-24 hours)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val dayPercent = ((hour * 60 + minute) / 1440.0 * 100).toInt()
+        dayProgressBar.text = buildProgressBar(dayPercent, "Day")
+        
+        // Year progress (1-365 days)
+        val dayOfYear = calendar.get(Calendar.DAY_OF_YEAR)
+        val totalDays = if (calendar.isLeapYear(calendar.get(Calendar.YEAR))) 366 else 365
+        val yearPercent = (dayOfYear.toDouble() / totalDays * 100).toInt()
+        yearProgressBar.text = buildProgressBar(yearPercent, "Year")
+    }
+
+    private fun buildProgressBar(percent: Int, label: String): String {
+        val barLength = 20
+        val filled = (percent * barLength / 100).coerceIn(0, barLength)
+        val bar = "█".repeat(filled) + "░".repeat(barLength - filled)
+        return "$label: [$bar] $percent%"
+    }
+
+    private fun Calendar.isLeapYear(year: Int): Boolean {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)
     }
 
     private fun loadApps() {
@@ -150,13 +161,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun showAppOptionsDialog(app: AppInfo) {
         val options = arrayOf(
-            "Customize",
-            "Hide App",
-            "App Info",
+            "Customize color",
+            "Hide app",
+            "App info",
             "Uninstall"
         )
 
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Dialog_Alert)
             .setTitle(app.getDisplayName())
             .setItems(options) { _, which ->
                 when (which) {
@@ -183,65 +194,16 @@ class MainActivity : AppCompatActivity() {
         loadApps()
     }
 
-    // Gesture handlers based on user preferences
-    private fun onSwipeUp() {
-        handleGesture(prefsManager.getGestureConfig().swipeUp)
-    }
-
-    private fun onSwipeDown() {
-        handleGesture(prefsManager.getGestureConfig().swipeDown)
-    }
-
-    private fun onSwipeLeft() {
-        handleGesture(prefsManager.getGestureConfig().swipeLeft)
-    }
-
-    private fun onSwipeRight() {
-        handleGesture(prefsManager.getGestureConfig().swipeRight)
-    }
-
-    private fun onDoubleTapGesture() {
-        handleGesture(prefsManager.getGestureConfig().doubleTap)
-    }
-
-    private fun handleGesture(action: GestureAction) {
-        when (action) {
-            GestureAction.OPEN_NOTIFICATIONS -> {
-                try {
-                    val intent = Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS)
-                    sendBroadcast(intent)
-                    
-                    @Suppress("DEPRECATION")
-                    val statusBarService = getSystemService("statusbar")
-                    val statusBarClass = Class.forName("android.app.StatusBarManager")
-                    val method = statusBarClass.getMethod("expandNotificationsPanel")
-                    method.invoke(statusBarService)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-            GestureAction.OPEN_SEARCH -> {
-                searchEditText.requestFocus()
-            }
-            GestureAction.NONE -> {
-                // Do nothing
-            }
-            else -> {
-                Toast.makeText(this, "Gesture: $action", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
-        loadApps() // Reload in case apps were customized or hidden
+        loadApps()
+        updateProgressBars()
     }
 
     override fun onBackPressed() {
         if (searchEditText.text.isNotEmpty()) {
             searchEditText.text.clear()
-        } else {
-            // Don't exit launcher on back press
         }
+        // Don't exit on back press
     }
 }
