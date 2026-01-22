@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Preview Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Preview"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/previewCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <TextView
+                android:id="@+id/previewText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="App Name"
+                android:textSize="18sp"
+                android:textColor="@android:color/white" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Custom Label -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom Label"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:id="@+id/customLabelInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Leave empty for default"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Background Color Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Background Color"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Quick Color Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
+            <Button
+                android:id="@+id/btnBgGreen"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Green"
+                android:textSize="10sp"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/btnBgBlue"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Blue"
+                android:textSize="10sp"
+                android:backgroundTint="#2196F3" />
+
+            <Button
+                android:id="@+id/btnBgRed"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Red"
+                android:textSize="10sp"
+                android:backgroundTint="#F44336" />
+
+            <Button
+                android:id="@+id/btnBgYellow"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Yellow"
+                android:textSize="10sp"
+                android:textColor="@android:color/black"
+                android:backgroundTint="#FFEB3B" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnBgPurple"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Purple"
+                android:textSize="10sp"
+                android:backgroundTint="#9C27B0" />
+
+            <Button
+                android:id="@+id/btnBgOrange"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Orange"
+                android:textSize="10sp"
+                android:backgroundTint="#FF9800" />
+
+            <Button
+                android:id="@+id/btnBgClear"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Clear"
+                android:textSize="10sp"
+                android:backgroundTint="@android:color/darker_gray" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/bgColorPreview"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="24dp" />
+
+        </LinearLayout>
+
+        <!-- RGB Sliders for Background -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Red"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/bgRedSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Green"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/bgGreenSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blue"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/bgBlueSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Text Color Section -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text Color"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="12dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <Button
+                android:id="@+id/btnTextWhite"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="White"
+                android:textSize="12sp"
+                android:backgroundTint="@android:color/white"
+                android:textColor="@android:color/black" />
+
+            <Button
+                android:id="@+id/btnTextBlack"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Black"
+                android:textSize="12sp"
+                android:backgroundTint="@android:color/black"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/btnTextDefault"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Default"
+                android:textSize="12sp"
+                android:backgroundTint="@android:color/darker_gray" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/textColorPreview"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="24dp" />
+
+        </LinearLayout>
+
+        <!-- RGB Sliders for Text -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Red"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/textRedSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Green"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/textGreenSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Blue"
+            android:textColor="@android:color/white" />
+        <SeekBar
+            android:id="@+id/textBlueSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="255"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Save"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#4CAF50" />
+
+            <Button
+                android:id="@+id/btnReset"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="4dp"
+                android:text="Reset"
+                android:textColor="@android:color/white"
+                android:backgroundTint="#F44336" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
